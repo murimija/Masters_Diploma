@@ -38,6 +38,12 @@ from numpy import sin, cos, pi
 from gym import core, spaces
 from gym.utils import seeding
 
+import random
+from itertools import count
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+
 __copyright__ = "Copyright 2013, RLPy http://acl.mit.edu/RLPy"
 __credits__ = ["Alborz Geramifard", "Robert H. Klein", "Christoph Dann",
                "William Dabney", "Jonathan P. How"]
@@ -108,7 +114,7 @@ class AcrobotEnv(core.Env):
 
     AVAIL_TORQUE = [-1., 0., +1]
 
-    torque_noise_max = 1.
+    torque_noise_max = 0.
 
     #: use dynamics equations from the nips paper or the book
     book_or_nips = "book"
@@ -338,7 +344,7 @@ def rk4(derivs, y0, t, *args, **kwargs):
         yout[i + 1] = y0 + dt / 6.0 * (k1 + 2 * k2 + 2 * k3 + k4)
     return yout
 
-EPISODES = 1000
+EPISODES = 500
 
 class DQNAgent:
     def __init__(self, state_size, action_size):
@@ -390,6 +396,8 @@ class DQNAgent:
     def save(self, name):
         self.model.save_weights(name)
 
+x_vals = []
+y_vals = []
 
 if __name__ == "__main__":
     env = AcrobotEnv();
@@ -414,8 +422,16 @@ if __name__ == "__main__":
             if done:
                 print("episode: {}/{}, score: {}, e: {:.2}"
                       .format(e, EPISODES, time, agent.epsilon))
+                x_vals.append(e)
+                y_vals.append(time)
                 break
             if len(agent.memory) > batch_size:
                 agent.replay(batch_size)
         # if e % 10 == 0:
         #     agent.save("./save/cartpole-dqn.h5")
+
+plt.style.use('fivethirtyeight')
+plt.plot(x_vals, y_vals)
+plt.tight_layout()
+plt.show()
+
