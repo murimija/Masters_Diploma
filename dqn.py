@@ -9,6 +9,7 @@ import gym
 from gym import spaces, logger
 from gym.utils import seeding
 import numpy as np
+import matplotlib.pyplot as plt
 
 class CartPoleEnv(gym.Env):
     """
@@ -166,15 +167,24 @@ class CartPoleEnv(gym.Env):
         if self.viewer is None:
             from gym.envs.classic_control import rendering
             self.viewer = rendering.Viewer(screen_width, screen_height)
-            l, r, t, b = -cartwidth / 2, cartwidth / 2, cartheight / 2, -cartheight / 2
             axleoffset = cartheight / 4.0
-            cart = rendering.FilledPolygon([(l, b), (l, t), (r, t), (r, b)])
+
+            l, r, t, b = -cartwidth / 2, cartwidth / 2, cartheight / 2, -cartheight / 2
+            box = rendering.make_polygon([(l, b), (l, t), (r, t), (r, b)])
+            circ0 = rendering.make_circle(cartheight / 2)
+            circ1 = rendering.make_circle(cartheight / 2)
+            circ0.add_attr(rendering.Transform(translation=(cartwidth/2, 0)))
+            circ1.add_attr(rendering.Transform(translation=(-cartwidth/2, 0)))
+
+            cart = rendering.Compound([box, circ0, circ1])
+            #cart = rendering.make_capsule(cartwidth, cartheight)
             self.carttrans = rendering.Transform()
+            cart.set_color(.38, .83, .68)
             cart.add_attr(self.carttrans)
             self.viewer.add_geom(cart)
             l, r, t, b = -polewidth / 2, polewidth / 2, polelen - polewidth / 2, -polewidth / 2
             pole = rendering.FilledPolygon([(l, b), (l, t), (r, t), (r, b)])
-            pole.set_color(.2, .2, .2)
+            pole.set_color(1, .87, .45)
             self.poletrans = rendering.Transform(translation=(0, axleoffset))
             pole.add_attr(self.poletrans)
             pole.add_attr(self.carttrans)
@@ -182,7 +192,7 @@ class CartPoleEnv(gym.Env):
             self.axle = rendering.make_circle(polewidth / 2)
             self.axle.add_attr(self.poletrans)
             self.axle.add_attr(self.carttrans)
-            self.axle.set_color(.5, .5, .8)
+            self.axle.set_color(.53, .13, .47)
             self.viewer.add_geom(self.axle)
             self.track = rendering.Line((0, carty), (screen_width, carty))
             self.track.set_color(0, 0, 0)
@@ -272,6 +282,8 @@ if __name__ == "__main__":
     done = False
     batch_size = 32
 
+    x_vals, y_vals = [], []
+
     for e in range(EPISODES):
         state = env.reset()
         state = np.reshape(state, [1, state_size])
@@ -279,11 +291,13 @@ if __name__ == "__main__":
             env.render()
             action = agent.act(state)
             next_state, reward, done, _ = env.step(action)
-            reward = reward if not done else -10
+            #reward = reward if not done else -10
             next_state = np.reshape(next_state, [1, state_size])
             agent.memorize(state, action, reward, next_state, done)
             state = next_state
             if done:
+                x_vals.append(e)
+                y_vals.append(time)
                 print("episode: {}/{}, score: {}, e: {:.2}"
                       .format(e, EPISODES, time, agent.epsilon))
                 break
@@ -291,3 +305,12 @@ if __name__ == "__main__":
                 agent.replay(batch_size)
         # if e % 10 == 0:
         #     agent.save("./save/cartpole-dqn.h5")
+
+plt.ylabel('Score')
+plt.xlabel('Episode')
+plt.style.use('fivethirtyeight')
+plt.plot(x_vals, y_vals, "-", lw=0.5, c="blue")
+plt.grid()
+
+plt.tight_layout()
+plt.show()

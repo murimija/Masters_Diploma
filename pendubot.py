@@ -175,7 +175,7 @@ class AcrobotEnv(core.Env):
 
     def _terminal(self):
         s = self.state
-        return bool (cos(s[0]) > 0) #(bool(cos(s[0])>0) + bool(cos(s[1])<0.5))  #bool(-cos(s[0]) - cos(s[1] + s[0]) > 1.)
+        return bool (cos(s[0]) > 0) | (cos(s[1]) < 0.5)  #(bool(cos(s[0])>0) + bool(cos(s[1])<0.5))  #bool(-cos(s[0]) - cos(s[1] + s[0]) > 1.)
 
     def _dsdt(self, s_augmented, t):
         m1 = self.LINK_MASS_1
@@ -234,16 +234,16 @@ class AcrobotEnv(core.Env):
         thetas = [s[0]- pi/2, s[0]+s[1]-pi/2]
         link_lengths = [self.LINK_LENGTH_1, self.LINK_LENGTH_2]
 
-        self.viewer.draw_line((-2.2, 1), (2.2, 1))
         for ((x,y),th,llen) in zip(xys, thetas, link_lengths):
             l,r,t,b = 0, llen, .1, -.1
             jtransform = rendering.Transform(rotation=th, translation=(x,y))
             link = self.viewer.draw_polygon([(l,b), (l,t), (r,t), (r,b)])
             link.add_attr(jtransform)
-            link.set_color(0,.8, .8)
+            link.set_color(.7, .4, .83)
             circ = self.viewer.draw_circle(.1)
-            circ.set_color(.8, .8, 0)
+            circ.set_color(1, .83, .45)
             circ.add_attr(jtransform)
+
 
         return self.viewer.render(return_rgb_array = mode=='rgb_array')
 
@@ -344,7 +344,7 @@ def rk4(derivs, y0, t, *args, **kwargs):
         yout[i + 1] = y0 + dt / 6.0 * (k1 + 2 * k2 + 2 * k3 + k4)
     return yout
 
-EPISODES = 500
+EPISODES = 100
 
 class DQNAgent:
     def __init__(self, state_size, action_size):
@@ -404,7 +404,7 @@ if __name__ == "__main__":
     state_size = env.observation_space.shape[0]
     action_size = env.action_space.n
     agent = DQNAgent(state_size, action_size)
-    # agent.load("./save/cartpole-dqn.h5")
+    agent.load("./save/cartpole-dqn.h5")
     done = False
     batch_size = 32
 
@@ -420,18 +420,28 @@ if __name__ == "__main__":
             agent.memorize(state, action, reward, next_state, done)
             state = next_state
             if done:
-                print("episode: {}/{}, score: {}, e: {:.2}"
-                      .format(e, EPISODES, time, agent.epsilon))
                 x_vals.append(e)
                 y_vals.append(time)
+                print("episode: {}/{}, score: {}, e: {:.2}"
+                      .format(e, EPISODES, time, agent.epsilon))
+
                 break
             if len(agent.memory) > batch_size:
                 agent.replay(batch_size)
-        # if e % 10 == 0:
-        #     agent.save("./save/cartpole-dqn.h5")
+        if e % 10 == 0:
+#            temp = ("Link_length_1: {} Link_length_2 n\, Link_mass_1 : {}, Link_mass_2: {}, Link_com_pos_1: {}, Link_com_pos_2: {}, Link_moi: {},".format(env.LINK_LENGTH_1, env.LINK_LENGTH_2, env.LINK_MASS_1, env.LINK_MASS_2, env.LINK_COM_POS_1, env.LINK_COM_POS_2, env.LINK_MOI))
+            agent.save("./save/pndubot.h5")
 
+#plt.title("Link_length_1: {} Link_length_2 n\, Link_mass_1 : {}, Link_mass_2: {}, Link_com_pos_1: {}, Link_com_pos_2: {}, Link_moi: {},"
+#                      .format(env.LINK_LENGTH_1, env.LINK_LENGTH_2, env.LINK_MASS_1, env.LINK_MASS_2, env.LINK_COM_POS_1, env.LINK_COM_POS_2, env.LINK_MOI))
+
+
+plt.ylabel('Score')
+plt.xlabel('Episode')
 plt.style.use('fivethirtyeight')
-plt.plot(x_vals, y_vals)
+plt.plot(x_vals, y_vals, "-", lw=0.5, c="blue")
+plt.grid()
+
 plt.tight_layout()
 plt.show()
 
