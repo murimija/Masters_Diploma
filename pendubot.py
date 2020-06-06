@@ -191,7 +191,7 @@ class AcrobotEnv(core.Env):
         theta1 = s[0]
         theta2 = s[1]
         dtheta1 = s[2]
-        dtheta2 = s[3]
+        dtheta2 = s[3] #ЭТи формулы что-то значат
         d1 = m1 * lc1 ** 2 + m2 * \
             (l1 ** 2 + lc2 ** 2 + 2 * l1 * lc2 * cos(theta2)) + I1 + I2
         d2 = m2 * (lc2 ** 2 + l1 * lc2 * cos(theta2)) + I2
