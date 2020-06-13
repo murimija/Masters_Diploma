@@ -101,20 +101,20 @@ class AcrobotEnv(core.Env):
 
     dt = .2
 
-    LINK_LENGTH_1 = 1.  # [m]
-    LINK_LENGTH_2 = 2  # [m]
-    LINK_MASS_1 = 4 #: [kg] mass of link 1
-    LINK_MASS_2 = 1 #: [kg] mass of link 2
+    LINK_LENGTH_1 = 1  # [m]
+    LINK_LENGTH_2 = 1  # [m]
+    LINK_MASS_1 = 1. #: [kg] mass of link 1
+    LINK_MASS_2 = 1. #: [kg] mass of link 2
     LINK_COM_POS_1 = 0.5  #: [m] position of the center of mass of link 1
     LINK_COM_POS_2 = 0.5  #: [m] position of the center of mass of link 2
-    LINK_MOI = 2  #: moments of inertia for both links
+    LINK_MOI = 4 #: moments of inertia for both links
 
     MAX_VEL_1 = 2
-    MAX_VEL_2 = 0.5
+    MAX_VEL_2 = 2
 
     AVAIL_TORQUE = [-1., 0., +1]
 
-    torque_noise_max = 0.
+    torque_noise_max = 1.
 
     #: use dynamics equations from the nips paper or the book
     book_or_nips = "book"
@@ -175,7 +175,7 @@ class AcrobotEnv(core.Env):
 
     def _terminal(self):
         s = self.state
-        return bool (cos(s[0]) > 0) | (cos(s[1]) < 0.5)  #(bool(cos(s[0])>0) + bool(cos(s[1])<0.5))  #bool(-cos(s[0]) - cos(s[1] + s[0]) > 1.)
+        return bool (cos(s[0]) > 0) | (cos(s[1]) < 0)  #(bool(cos(s[0])>0) + bool(cos(s[1])<0.5))  #bool(-cos(s[0]) - cos(s[1] + s[0]) > 1.)
 
     def _dsdt(self, s_augmented, t):
         m1 = self.LINK_MASS_1
@@ -344,7 +344,7 @@ def rk4(derivs, y0, t, *args, **kwargs):
         yout[i + 1] = y0 + dt / 6.0 * (k1 + 2 * k2 + 2 * k3 + k4)
     return yout
 
-EPISODES = 100
+EPISODES = 2
 
 class DQNAgent:
     def __init__(self, state_size, action_size):
@@ -353,9 +353,9 @@ class DQNAgent:
         self.memory = deque(maxlen=2000)
         self.gamma = 0.95    # discount rate
         self.epsilon = 1.0  # exploration rate
-        self.epsilon_min = 0.01
+        self.epsilon_min = 0.001
         self.epsilon_decay = 0.995
-        self.learning_rate = 0.001
+        self.learning_rate = 0.0001
         self.model = self._build_model()
 
     def _build_model(self):
@@ -399,49 +399,61 @@ class DQNAgent:
 x_vals = []
 y_vals = []
 
-if __name__ == "__main__":
-    env = AcrobotEnv();
-    state_size = env.observation_space.shape[0]
-    action_size = env.action_space.n
-    agent = DQNAgent(state_size, action_size)
-    agent.load("./save/cartpole-dqn.h5")
-    done = False
-    batch_size = 32
+lm = [[1, 1], [2, 1], [0.5, 2],
+      [1, 2], [2, 2], [0.5, 2],
+      [1, 0.5], [2, 0.5], [0.5, 0.5]]
 
-    for e in range(EPISODES):
-        state = env.reset()
-        state = np.reshape(state, [1, state_size])
-        for time in range(500):
-            env.render()
-            action = agent.act(state)
-            next_state, reward, done, _ = env.step(action)
-            #reward = reward if not done else -10
-            next_state = np.reshape(next_state, [1, state_size])
-            agent.memorize(state, action, reward, next_state, done)
-            state = next_state
-            if done:
-                x_vals.append(e)
-                y_vals.append(time)
-                print("episode: {}/{}, score: {}, e: {:.2}"
-                      .format(e, EPISODES, time, agent.epsilon))
+for lm_i in lm:
 
-                break
-            if len(agent.memory) > batch_size:
-                agent.replay(batch_size)
-        if e % 10 == 0:
-#            temp = ("Link_length_1: {} Link_length_2 n\, Link_mass_1 : {}, Link_mass_2: {}, Link_com_pos_1: {}, Link_com_pos_2: {}, Link_moi: {},".format(env.LINK_LENGTH_1, env.LINK_LENGTH_2, env.LINK_MASS_1, env.LINK_MASS_2, env.LINK_COM_POS_1, env.LINK_COM_POS_2, env.LINK_MOI))
-            agent.save("./save/pndubot.h5")
+    AcrobotEnv.LINK_LENGTH_2 = lm_i[0]
+    AcrobotEnv.LINK_MASS_2 = lm_i[1]
 
-#plt.title("Link_length_1: {} Link_length_2 n\, Link_mass_1 : {}, Link_mass_2: {}, Link_com_pos_1: {}, Link_com_pos_2: {}, Link_moi: {},"
-#                      .format(env.LINK_LENGTH_1, env.LINK_LENGTH_2, env.LINK_MASS_1, env.LINK_MASS_2, env.LINK_COM_POS_1, env.LINK_COM_POS_2, env.LINK_MOI))
+    x_vals.clear()
+    y_vals.clear()
 
 
-plt.ylabel('Score')
-plt.xlabel('Episode')
-plt.style.use('fivethirtyeight')
-plt.plot(x_vals, y_vals, "-", lw=0.5, c="blue")
-plt.grid()
+    if __name__ == "__main__":
 
-plt.tight_layout()
-plt.show()
+        env = AcrobotEnv();
+        state_size = env.observation_space.shape[0]
+        action_size = env.action_space.n
+        agent = DQNAgent(state_size, action_size)
+        agent.load("./save/cartpole-dqn.h5")
+        done = False
+        batch_size = 32
 
+        for e in range(EPISODES):
+            state = env.reset()
+            state = np.reshape(state, [1, state_size])
+            for time in range(500):
+                # env.render()
+                action = agent.act(state)
+                next_state, reward, done, _ = env.step(action)
+                #reward = reward if not done else -10 #Включил
+                next_state = np.reshape(next_state, [1, state_size])
+                agent.memorize(state, action, reward, next_state, done)
+                state = next_state
+                if done:
+                    x_vals.append(e)
+                    y_vals.append(time)
+                    print("episode: {}/{}, score: {}, e: {:.4}"
+                          .format(e, EPISODES, time, agent.epsilon))
+
+                    break
+                if len(agent.memory) > batch_size:
+                    agent.replay(batch_size)
+            if e % 10 == 0:
+    #            temp = ("Link_length_1: {} Link_length_2 n\, Link_mass_1 : {}, Link_mass_2: {}, Link_com_pos_1: {}, Link_com_pos_2: {}, Link_moi: {},".format(env.LINK_LENGTH_1, env.LINK_LENGTH_2, env.LINK_MASS_1, env.LINK_MASS_2, env.LINK_COM_POS_1, env.LINK_COM_POS_2, env.LINK_MOI))
+                agent.save("./save/pndubot.h5")
+
+    #plt.title("Link_length_1: {} Link_length_2 n\, Link_mass_1 : {}, Link_mass_2: {}, Link_com_pos_1: {}, Link_com_pos_2: {}, Link_moi: {},"
+    #                      .format(env.LINK_LENGTH_1, env.LINK_LENGTH_2, env.LINK_MASS_1, env.LINK_MASS_2, env.LINK_COM_POS_1, env.LINK_COM_POS_2, env.LINK_MOI))
+
+    plt.title('Length = {} m, Weight = {} kg'.format(AcrobotEnv.LINK_LENGTH_2, AcrobotEnv.LINK_MASS_2))
+    plt.ylabel('Score')
+    plt.xlabel('Episode')
+    plt.style.available
+    plt.grid(True, which='both', color='k', linestyle='-', linewidth=0.2)
+    plt.plot(x_vals, y_vals, "-", lw=0.5, c="blue")
+    plt.show()
+    plt.clf()

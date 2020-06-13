@@ -220,7 +220,7 @@ class CartPoleEnv(gym.Env):
             self.viewer.close()
             self.viewer = None
 
-EPISODES = 100
+EPISODES = 4
 
 class DQNAgent:
     def __init__(self, state_size, action_size):
@@ -273,44 +273,63 @@ class DQNAgent:
         self.model.save_weights(name)
 
 
-if __name__ == "__main__":
-    env = CartPoleEnv();
-    state_size = env.observation_space.shape[0]
-    action_size = env.action_space.n
-    agent = DQNAgent(state_size, action_size)
-    # agent.load("./save/cartpole-dqn.h5")
-    done = False
-    batch_size = 32
+x_vals = []
+y_vals = []
 
-    x_vals, y_vals = [], []
+lm = [[1, 1], [2, 1], [0.5, 2],
+      [1, 2], [2, 2], [0.5, 2],
+      [1, 0.5], [2, 0.5], [0.5, 0.5]]
 
-    for e in range(EPISODES):
-        state = env.reset()
-        state = np.reshape(state, [1, state_size])
-        for time in range(500):
-            env.render()
-            action = agent.act(state)
-            next_state, reward, done, _ = env.step(action)
-            #reward = reward if not done else -10
-            next_state = np.reshape(next_state, [1, state_size])
-            agent.memorize(state, action, reward, next_state, done)
-            state = next_state
-            if done:
-                x_vals.append(e)
-                y_vals.append(time)
-                print("episode: {}/{}, score: {}, e: {:.2}"
-                      .format(e, EPISODES, time, agent.epsilon))
-                break
-            if len(agent.memory) > batch_size:
-                agent.replay(batch_size)
-        # if e % 10 == 0:
-        #     agent.save("./save/cartpole-dqn.h5")
+for lm_i in lm:
 
-plt.ylabel('Score')
-plt.xlabel('Episode')
-plt.style.use('fivethirtyeight')
-plt.plot(x_vals, y_vals, "-", lw=0.5, c="blue")
-plt.grid()
+    CartPoleEnv.length = lm_i[0]
+    CartPoleEnv.masspole = lm_i[1]
 
-plt.tight_layout()
-plt.show()
+    x_vals.clear()
+    y_vals.clear()
+
+
+    if __name__ == "__main__":
+
+        env = CartPoleEnv();
+        state_size = env.observation_space.shape[0]
+        action_size = env.action_space.n
+        agent = DQNAgent(state_size, action_size)
+        done = False
+        batch_size = 32
+
+        for e in range(EPISODES):
+            state = env.reset()
+            state = np.reshape(state, [1, state_size])
+            for time in range(500):
+                #env.render()
+                action = agent.act(state)
+                next_state, reward, done, _ = env.step(action)
+                #reward = reward if not done else -10 #Включил
+                next_state = np.reshape(next_state, [1, state_size])
+                agent.memorize(state, action, reward, next_state, done)
+                state = next_state
+                if done:
+                    x_vals.append(e)
+                    y_vals.append(time)
+                    print("episode: {}/{}, score: {}, e: {:.4}"
+                          .format(e, EPISODES, time, agent.epsilon))
+
+                    break
+                if len(agent.memory) > batch_size:
+                    agent.replay(batch_size)
+            if e % 10 == 0:
+    #            temp = ("Link_length_1: {} Link_length_2 n\, Link_mass_1 : {}, Link_mass_2: {}, Link_com_pos_1: {}, Link_com_pos_2: {}, Link_moi: {},".format(env.LINK_LENGTH_1, env.LINK_LENGTH_2, env.LINK_MASS_1, env.LINK_MASS_2, env.LINK_COM_POS_1, env.LINK_COM_POS_2, env.LINK_MOI))
+                agent.save("./save/pndubot.h5")
+
+    #plt.title("Link_length_1: {} Link_length_2 n\, Link_mass_1 : {}, Link_mass_2: {}, Link_com_pos_1: {}, Link_com_pos_2: {}, Link_moi: {},"
+    #                      .format(env.LINK_LENGTH_1, env.LINK_LENGTH_2, env.LINK_MASS_1, env.LINK_MASS_2, env.LINK_COM_POS_1, env.LINK_COM_POS_2, env.LINK_MOI))
+
+    plt.title('Length = {} m, Weight = {} kg'.format(CartPoleEnv.length, CartPoleEnv.masspole))
+    plt.ylabel('Score')
+    plt.xlabel('Episode')
+    plt.style.available
+    plt.grid(True, which='both', color='k', linestyle='-', linewidth=0.2)
+    plt.plot(x_vals, y_vals, "-", lw=0.5, c="blue")
+    plt.show()
+    plt.clf()
