@@ -37,7 +37,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.dqn">
+  <component name="RunManager" selected="Python.ddqn">
     <configuration name="Test_2" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Masters_Diploma" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -74,6 +74,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cartPoll.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ddqn" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Masters_Diploma" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ddqn.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -128,8 +150,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.dqn" />
+        <item itemvalue="Python.ddqn" />
         <item itemvalue="Python.pendubot" />
+        <item itemvalue="Python.dqn" />
         <item itemvalue="Python.cartPoll" />
         <item itemvalue="Python.Test_2" />
       </list>
@@ -167,7 +190,8 @@
       <workItem from="1591524444487" duration="12355000" />
       <workItem from="1591732152473" duration="4217000" />
       <workItem from="1591782597133" duration="1953000" />
-      <workItem from="1592044634418" duration="13940000" />
+      <workItem from="1592044634418" duration="19791000" />
+      <workItem from="1592129508693" duration="1996000" />
     </task>
     <servers />
   </component>
@@ -179,25 +203,25 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="423" y="168" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591393167556" />
-    <state width="1877" height="242" key="GridCell.Tab.0.bottom" timestamp="1592065930649">
+    <state width="1877" height="242" key="GridCell.Tab.0.bottom" timestamp="1592130253052">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="242" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592065930649" />
+    <state width="1877" height="242" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592130253052" />
     <state width="914" height="242" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1591555679086" />
-    <state width="1877" height="242" key="GridCell.Tab.0.center" timestamp="1592065930649">
+    <state width="1877" height="242" key="GridCell.Tab.0.center" timestamp="1592130253052">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="242" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592065930649" />
+    <state width="1877" height="242" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592130253052" />
     <state width="914" height="242" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1591555679086" />
-    <state width="1877" height="242" key="GridCell.Tab.0.left" timestamp="1592065930649">
+    <state width="1877" height="242" key="GridCell.Tab.0.left" timestamp="1592130253052">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="242" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592065930649" />
+    <state width="1877" height="242" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592130253052" />
     <state width="914" height="242" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1591555679086" />
-    <state width="1877" height="242" key="GridCell.Tab.0.right" timestamp="1592065930649">
+    <state width="1877" height="242" key="GridCell.Tab.0.right" timestamp="1592130253052">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="242" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592065930649" />
+    <state width="1877" height="242" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592130253052" />
     <state width="914" height="242" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1591555679086" />
     <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1590844470560">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -215,23 +239,24 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="348" key="GridCell.Tab.1.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1590844470560" />
-    <state x="461" y="161" key="SettingsEditor" timestamp="1590922615463">
+    <state x="461" y="161" key="SettingsEditor" timestamp="1592067709392">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="461" y="161" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1590922615463" />
-    <state x="2576" y="342" key="com.intellij.ide.util.TipDialog" timestamp="1592045350881">
+    <state x="461" y="161" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592067709392" />
+    <state x="2576" y="342" key="com.intellij.ide.util.TipDialog" timestamp="1592130265131">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2576" y="342" key="com.intellij.ide.util.TipDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592045350881" />
+    <state x="2576" y="342" key="com.intellij.ide.util.TipDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592130265131" />
     <state x="656" y="125" width="607" height="789" key="find.popup" timestamp="1591537892641">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="656" y="125" width="607" height="789" key="find.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591537892641" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Masters_Diploma$dqn.coverage" NAME="dqn Coverage Results" MODIFIED="1592065930640" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Masters_Diploma$dqn.coverage" NAME="dqn Coverage Results" MODIFIED="1592066751298" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Masters_Diploma$Test_2.coverage" NAME="Test_2 Coverage Results" MODIFIED="1590690351499" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Masters_Diploma$cartPoll.coverage" NAME="cartPoll Coverage Results" MODIFIED="1591735756068" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Masters_Diploma$pendubot.coverage" NAME="pendubot Coverage Results" MODIFIED="1592065029693" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Masters_Diploma$pendubot.coverage" NAME="pendubot Coverage Results" MODIFIED="1592129809957" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Masters_Diploma$ddqn.coverage" NAME="ddqn Coverage Results" MODIFIED="1592130253040" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

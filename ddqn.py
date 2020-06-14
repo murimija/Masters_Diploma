@@ -10,7 +10,7 @@ from keras import backend as K
 
 import tensorflow as tf
 
-EPISODES = 5000
+EPISODES = 100
 
 class DQNAgent:
     def __init__(self, state_size, action_size):
@@ -85,6 +85,8 @@ class DQNAgent:
     def save(self, name):
         self.model.save_weights(name)
 
+x_vals = []
+y_vals = []
 
 if __name__ == "__main__":
     env = gym.make('CartPole-v1')
@@ -98,11 +100,12 @@ if __name__ == "__main__":
     for e in range(EPISODES):
         state = env.reset()
         state = np.reshape(state, [1, state_size])
-        for time in range(12):
-            env.render()
+        for time in range(500):
+            # env.render()
             action = agent.act(state)
             next_state, reward, done, _ = env.step(action)
             #reward = reward if not done else -10
+
             x,x_dot,theta,theta_dot = next_state
             r1 = (env.x_threshold - abs(x)) / env.x_threshold - 0.8
             r2 = (env.theta_threshold_radians - abs(theta)) / env.theta_threshold_radians - 0.5
@@ -113,6 +116,8 @@ if __name__ == "__main__":
             state = next_state
             if done:
                 agent.update_target_model()
+                x_vals.append(e)
+                y_vals.append(time)
                 print("episode: {}/{}, score: {}, e: {:.2}"
                       .format(e, EPISODES, time, agent.epsilon))
                 break
@@ -120,3 +125,13 @@ if __name__ == "__main__":
                 agent.replay(batch_size)
         # if e % 10 == 0:
         #     agent.save("./save/cartpole-ddqn.h5")
+
+import matplotlib.pyplot as plt
+
+#plt.title('Length = {} m, Weight = {} kg'.format(CartPoleEnv.length, CartPoleEnv.masspole))
+plt.ylabel('Score')
+plt.xlabel('Episode')
+plt.style.available
+plt.grid(True, which='both', color='k', linestyle='-', linewidth=0.2)
+plt.plot(x_vals, y_vals, "-", lw=0.5, c="blue")
+plt.show()

@@ -276,9 +276,9 @@ class DQNAgent:
 x_vals = []
 y_vals = []
 
-lm = [[1, 1], [2, 1], [0.5, 2],
-      [1, 2], [2, 2], [0.5, 2],
-      [1, 0.5], [2, 0.5], [0.5, 0.5]]
+lm = [[1, 1], [2, 1], [0.5, 2]]#,
+#      [1, 2], [2, 2], [0.5, 2],
+#      [1, 0.5], [2, 0.5], [0.5, 0.5]]
 
 for lm_i in lm:
 
@@ -302,13 +302,16 @@ for lm_i in lm:
             state = env.reset()
             state = np.reshape(state, [1, state_size])
             for time in range(500):
-                #env.render()
+                env.render()
                 action = agent.act(state)
                 next_state, reward, done, _ = env.step(action)
                 #reward = reward if not done else -10 #Включил
+
                 next_state = np.reshape(next_state, [1, state_size])
+
                 agent.memorize(state, action, reward, next_state, done)
                 state = next_state
+
                 if done:
                     x_vals.append(e)
                     y_vals.append(time)
